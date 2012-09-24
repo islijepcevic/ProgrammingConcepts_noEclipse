@@ -1,0 +1,1 @@
+/usr/bin/c++   -Wall -Wconversion -O3 -DNDEBUG    CMakeFiles/exercise_1_1.dir/exercise_1_1.cpp.o  -o exercise_1_1 -rdynamic 

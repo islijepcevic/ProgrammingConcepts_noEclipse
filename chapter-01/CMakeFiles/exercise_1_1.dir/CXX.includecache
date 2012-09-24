@@ -1,0 +1,12 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ivan/EPFL/courses/programming_concepts_in_scientific_computing/excercises/git_repo/chapter-01/exercise_1_1.cpp
+iostream
+-
+

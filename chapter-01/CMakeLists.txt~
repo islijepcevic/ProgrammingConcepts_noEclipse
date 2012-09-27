@@ -6,3 +6,4 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 # The syntax is add_executable(executable_name source_file_name)
 
 add_executable(exercise-template exercise-template.cpp)
+add_executable(exercise_1_1 exercise_1_1.cpp)

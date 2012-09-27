@@ -15,9 +15,7 @@
 
 int main(int argc, char* argv[])
 {
-	/*
-	 * The body of the program goes here
-	 */
+    std::cout << "Hello Worldy!\n";
     return 0;
 }
 

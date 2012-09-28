@@ -3,4 +3,4 @@ project(PCSC-Exercises)
 
 add_subdirectory(chapter-01)
 add_subdirectory(chapter-02)
-
+add_subdirectory(chapter-03)

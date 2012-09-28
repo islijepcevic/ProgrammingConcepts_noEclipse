@@ -15,5 +15,9 @@
 *~
 */*~
 
+# something more (probably from compilation
+*.swp
+*/*.swp
+
 build/opt/*
 build/debug/*

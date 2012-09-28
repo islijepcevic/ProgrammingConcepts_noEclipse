@@ -1,1 +1,0 @@
-/usr/bin/c++   -Wall -Wconversion -O3 -DNDEBUG    CMakeFiles/exercise-template.dir/exercise-template.cpp.o  -o exercise-template -rdynamic 

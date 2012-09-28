@@ -28,7 +28,7 @@ double scalarProduct(double vector1[], double vector2[]) {
     double theProduct = 0;
 
     for (int i = 0; i < N; i++) {
-        theProduct = theProduct + (vector1[i] + vector2[i]);
+        theProduct = theProduct + (vector1[i] * vector2[i]);
     }
 
     return theProduct;
@@ -42,7 +42,8 @@ double euclidianNorm(double vector[]) {
         theNorm += pow(vector[i], 2);
     }
 
-    return pow(theNorm, 1/2);
+    return pow(theNorm, 1./2);  //works
+    //return sqrt(theNorm);     //works
 }
 
 int main(int argc, char* argv[]) {
@@ -52,18 +53,18 @@ int main(int argc, char* argv[]) {
     double vector2[N];
     
     // vector input (ugly)
-    std::cout << "vector1 input" << endl;
+    std::cout << "vector1 input" << std::endl;
     vectorInput( vector1 );
     
-    std::cout << "vector2 input" << endl;
+    std::cout << "vector2 input" << std::endl;
     vectorInput( vector2 );
 
     // scalar product
-    std::cout >> scalarProduct(vector1, vector2);
+    std::cout << "the scalar product: " << scalarProduct(vector1, vector2) << std::endl;
 
     // Euclidian norms
-    std::cout << "The Euclidian norm of vector1: " << euclidianNorm(vector1) << endl;
-    std::cout << "The Euclidian norm of vector2: " << euclidianNorm(vector2) << endl;
+    std::cout << "The Euclidian norm of vector1: " << euclidianNorm(vector1) << std::endl;
+    std::cout << "The Euclidian norm of vector2: " << euclidianNorm(vector2) << std::endl;
 
     return 0;
 }

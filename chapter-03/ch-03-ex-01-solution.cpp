@@ -31,14 +31,14 @@ int main(int argc, char* argv[])
 	for(int i = 0; i < 4; ++i) {
 		output_file << x[i] << " ";
 	}
-	output_file << std::endl;
+	output_file << "\n";
 	// Flush after writing vector x
 	output_file.flush();
 	// Do the same for y vector
 	for(int i = 0; i < 4; ++i) {
 		output_file << y[i] << " ";
 	}
-	output_file << std::endl;
+	output_file << "\n";
 	// Flush after writing vector y
 	output_file.flush();
 	// Close the file when finished

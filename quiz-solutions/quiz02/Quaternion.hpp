@@ -47,10 +47,10 @@ public:
 	Quaternion operator*(const Quaternion& q) const;
 
 	// Other public methods
-	void Print(std::ostream& s = std::cout);
+	void Print(std::ostream& s = std::cout) const;
 
 	// Friend functions
-	friend std::ostream& operator<<(std::ostream& output, const Quaternion& q);
+	friend std::ostream& operator<<(std::ostream& s, const Quaternion& q);
 
 private:
 	// Private data members

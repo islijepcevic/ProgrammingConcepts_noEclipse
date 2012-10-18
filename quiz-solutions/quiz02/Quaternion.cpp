@@ -101,7 +101,7 @@ Quaternion Quaternion::operator*(const Quaternion& q) const
 
 // Other public methods
 
-void Quaternion::Print(std::ostream& s)
+void Quaternion::Print(std::ostream& s) const
 {
 	s << "( " << mScalarPart << " , " << mVectorPart.GetX() << " , "
 	  << mVectorPart.GetY() << " , " << mVectorPart.GetZ() << " )";
@@ -109,13 +109,9 @@ void Quaternion::Print(std::ostream& s)
 
 // Friend functions
 
-std::ostream& operator<<(std::ostream& output, const Quaternion& q)
+std::ostream& operator<<(std::ostream& s, const Quaternion& q)
 {
-	output << "( " << q.GetScalarPart()
-		   << " , " << q.GetVectorPart().GetX()
-		   << " , " << q.GetVectorPart().GetY()
-		   << " , " << q.GetVectorPart().GetZ()
-		   << " )";
+	q.Print(s);
 
-	return output;
+	return s;
 }

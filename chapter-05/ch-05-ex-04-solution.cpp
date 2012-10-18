@@ -41,7 +41,7 @@ void mean_and_std_rec(const double* const v, const double size,
 {
 	double mean_prev = v[0];
 	double stdev_accum = 0.0;
-	double mean_next;
+	double mean_next = 0.0;
 
 	for (int i = 1; i < size; ++i) {
 		mean_next = mean_prev + (v[i] - mean_prev) / (i + 1);

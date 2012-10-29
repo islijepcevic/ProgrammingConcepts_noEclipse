@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
 	iterations = NewtonSolver<Scalar>(x, ScalarFunction, ScalarSolveJacobian,
 									  tolerance, maxIterations);
 
-	std::cout << "solution = " << solution << " reached after "
+	std::cout << "solution = " << x << " reached after "
 			  << iterations << " iterations." << std::endl;
 
     return 0;

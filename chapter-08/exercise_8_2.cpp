@@ -1,5 +1,6 @@
 #include <iostream>
 
+//template<class T> // this also works (yeah, for ints and doubles)
 template<typename T>
 T abs(T num)
 {

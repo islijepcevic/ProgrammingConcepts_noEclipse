@@ -5,5 +5,5 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 # As you solve exercises, you need to add them here.
 # The syntax is add_executable(executable_name source_file_name)
 
-add_executable(exercise_6_1 exercise_6_1.cpp ComplexNumber.cpp)
-add_executable(exercise_6_2 exercise_6_2.cpp Matrix22.cpp)
+add_executable(exercise_8_1 exercise_8_1.cpp)
+#add_executable(exercise_6_2 exercise_6_2.cpp Matrix22.cpp)

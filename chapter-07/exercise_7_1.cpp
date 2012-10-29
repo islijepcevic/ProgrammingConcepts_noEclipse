@@ -1,5 +1,5 @@
 #include <iostream>
-#include "phd_student.hpp"
+#include "exercise1/phd_student.hpp"
 
 int main()
 {

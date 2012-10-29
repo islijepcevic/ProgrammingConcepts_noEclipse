@@ -90,17 +90,11 @@ void ComplexNumber::SetConjugate()
 }
 
 // Overloading the = (assignment) operator
-ComplexNumber& ComplexNumber:: operator=(const ComplexNumber& z)
+ComplexNumber& ComplexNumber::
+operator=(const ComplexNumber& z)
 {
     mRealPart = z.mRealPart;
     mImaginaryPart = z.mImaginaryPart;
-    return *this;
-}
-
-ComplexNumber& ComplexNumber::operator+=(const ComplexNumber& z)
-{
-    mRealPart += z.mRealPart;
-    mImaginaryPart += z.mImaginaryPart;
     return *this;
 }
 
@@ -133,14 +127,9 @@ operator-(const ComplexNumber& z) const
     return w;
 }
 
-ComplexNumber ComplexNumber::operator*(const ComplexNumber& z) const
-{
-    ComplexNumber w(mRealPart * z.mRealPart, mImaginaryPart * z.mImaginaryPart);
-    return w;
-}
-
 // Overloading the insertion << operator
-std::ostream& operator<<(std::ostream& output, const ComplexNumber& z)
+std::ostream& operator<<(std::ostream& output,
+const ComplexNumber& z)
 {
     // Format as "(a + bi)" or as "(a - bi)"
     output << "(" << z.mRealPart << " ";
@@ -154,8 +143,6 @@ std::ostream& operator<<(std::ostream& output, const ComplexNumber& z)
         // Replace + with minus sign
         output << "- " << -z.mImaginaryPart << "i)";
     }
-
-    return output;
 }
 
 /*

@@ -1,5 +1,8 @@
 #include "AbstractOdeSolver.hpp"
 
+AbstractOdeSolver::~AbstractOdeSolver() {
+}
+
 double AbstractOdeSolver::getStepSize() const {
     return stepSize;
 }

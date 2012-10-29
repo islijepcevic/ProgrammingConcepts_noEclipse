@@ -12,6 +12,8 @@ private:
     double (*rhs)(double, double);
 
 public:
+    virtual ~AbstractOdeSolver();
+
     double getStepSize() const;
     double getInitialTime() const;
     double getFinalTime() const;
@@ -21,8 +23,8 @@ public:
     void setTimeInterval(double t0, double t1);
     void setInitialValue(double y0);
     void setRightHandSide(double (*fun)(double, double));
-    virtual double rightHandSide(double y, double t) const;
-    virtual double solveEquation() = 0;
+    double rightHandSide(double y, double t) const;
+    virtual void solveEquation() = 0;
 };
 
 

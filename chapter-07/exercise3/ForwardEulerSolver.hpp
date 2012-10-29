@@ -1,10 +1,14 @@
 #ifndef FORWARDEULERSOLVERDEF
 #define FORWARDEULERSOLVERDEF
 
-class ForwardEulerSolver : public AbstractOdeSolver
-{
-public:
+#include "AbstractOdeSolver.hpp"
 
+class ForwardEulerSolver : public AbstractOdeSolver {
+public:
+    ForwardEulerSolver();
+    ~ForwardEulerSolver();
+
+    virtual void solveEquation();
 };
 
 #endif /* FORWARDEULERSOLVERDEF */

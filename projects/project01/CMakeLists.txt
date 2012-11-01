@@ -9,6 +9,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 add_executable(project-01-solution project-01-solution.cpp
                Vector.cpp
                DenseMatrix.cpp
+               CsrMatrix.cpp
                Laplacian2DMatrixGenerator.cpp
-               ConjugateGradientDenseMatrix.cpp
+               ConjugateGradient.cpp
                WallClock.cpp)

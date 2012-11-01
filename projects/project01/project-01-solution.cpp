@@ -21,7 +21,7 @@
 #include "Vector.hpp"
 #include "AbstractMatrix.hpp"
 #include "Laplacian2DMatrixGenerator.hpp"
-#include "ConjugateGradientDenseMatrix.hpp"
+#include "ConjugateGradient.hpp"
 #include "WallClock.hpp"
 
 int main(int argc, char* argv[])
@@ -76,12 +76,7 @@ int main(int argc, char* argv[])
 	Laplacian2DMatrixGenerator(A, nx, storageType);
 
 	// Solve the system Ax = b;
-	// Uncomment this line after you've implemented ConjugateGradient
-	// int numIter = ConjugateGradient(*A, b, u, tol, maxIter);
-
-	// and remove the following two lines.
-	DenseMatrix* DenseA = dynamic_cast<DenseMatrix*>(A);
-	int numIter = ConjugateGradientDenseMatrix(*DenseA, b, u, tol, maxIter);
+	int numIter = ConjugateGradient(*A, b, u, tol, maxIter);
 
 	timer.stop();
 

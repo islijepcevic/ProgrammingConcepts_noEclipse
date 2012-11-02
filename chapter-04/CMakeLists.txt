@@ -9,3 +9,8 @@ add_executable(exercise_4_1 exercise_4_1.cpp)
 add_executable(exercise_4_2 exercise_4_2.cpp)
 #add_executable(exercise_4_3 exercise_4_3.cpp)
 #add_executable(exercise_4_4 exercise_4_4.cpp)
+
+add_executable(ch-04-ex-01-solution ch-04-ex-01-solution.cpp)
+add_executable(ch-04-ex-02-solution ch-04-ex-02-solution.cpp)
+add_executable(ch-04-ex-03-solution ch-04-ex-03-solution.cpp)
+add_executable(ch-04-ex-04-solution ch-04-ex-04-solution.cpp)

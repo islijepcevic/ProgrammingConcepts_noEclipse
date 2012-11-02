@@ -20,3 +20,10 @@ add_executable(abstract_person_instance exercise2/abstract_person_instance)
 #add_executable(abstract_person_abstract_instance exercise2/abstract_person_abstract_instance) # expected error
 
 add_executable(exercise_7_3 exercise_7_3.cpp exercise3/ForwardEulerSolver.cpp exercise3/AbstractOdeSolver.cpp exercise3/RungeKuttaSolver.cpp)
+
+
+add_executable(ch-07-ex-01-solution ch-07-ex-01-solution.cpp Student.cpp
+               GraduateStudent.cpp PhDStudent.cpp)
+add_executable(ch-07-ex-03-solution ch-07-ex-03-solution.cpp
+               AbstractOdeSolver.cpp ForwardEulerSolver.cpp
+               RungeKuttaSolver.cpp)

@@ -7,3 +7,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(exercise_6_1 exercise_6_1.cpp ComplexNumber.cpp)
 add_executable(exercise_6_2 exercise_6_2.cpp Matrix22.cpp)
+
+add_executable(ch-06-ex-01-solution ch-06-ex-01-solution.cpp
+               ComplexMatrix3x3.cpp ComplexNumber.cpp)
+add_executable(ch-06-ex-02-solution ch-06-ex-02-solution.cpp
+               DoubleMatrix2x2.cpp)
+add_executable(test_complex_numbers test_complex_numbers.cpp
+               ComplexNumber.cpp)

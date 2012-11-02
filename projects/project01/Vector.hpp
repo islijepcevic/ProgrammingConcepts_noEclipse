@@ -46,6 +46,7 @@ public:
 	void Print(std::ostream& s = std::cout);
 
 	// Private data
+private:
 	std::vector<double> mVector;
 	unsigned long mSize;
 };

@@ -58,6 +58,7 @@ public:
 	void Print(std::ostream& s = std::cout);
 
 	// Private data
+private:
 	// Dimension of the matrix
 	unsigned long mSize;
 	// Number of non zero elements

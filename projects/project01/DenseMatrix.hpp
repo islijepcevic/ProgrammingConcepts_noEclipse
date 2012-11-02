@@ -36,6 +36,7 @@ public:
 	void Print(std::ostream& s = std::cout);
 
 	// Private data
+private:
 	double** mMatrix;
 	unsigned long mSize;
 };

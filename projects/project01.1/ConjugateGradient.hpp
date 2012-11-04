@@ -2,6 +2,7 @@
  * ConjugateGradient.hpp
  *
  * Conjugate gradient solver that uses a the AbstractMatrix interface
+ * Templated on the type of the matrix and vector elements
  *
  *  Created on: Nov 1, 2012
  *      Author: rpopescu
@@ -25,21 +26,29 @@
  * 		tol - the desired accuracy
  * 		maxIter - the maximum number of iterations to be performed
  */
-int ConjugateGradient(const AbstractMatrix& A, const Vector& b, Vector& x,
-					  const double tol, const int maxIter);
+template<typename ValueType>
+int ConjugateGradient(const AbstractMatrix<ValueType>& A,
+					  const Vector<ValueType>& b,
+					  Vector<ValueType>& x,
+					  const ValueType tol,
+					  const int maxIter);
 
-int ConjugateGradient(const AbstractMatrix& A, const Vector& b, Vector& x,
-					  const double tol, const int maxIter)
+template<typename ValueType>
+int ConjugateGradient(const AbstractMatrix<ValueType>& A,
+					  const Vector<ValueType>& b,
+					  Vector<ValueType>& x,
+					  const ValueType tol,
+					  const int maxIter)
 {
-	Vector r = b - A * x;
-	Vector p = r;
-	double res_old = r.dot(r);
-	double res_new;
+	Vector<ValueType> r = b - A * x;
+	Vector<ValueType> p = r;
+	ValueType res_old = r.dot(r);
+	ValueType res_new;
 
 	int iter = 0;
 	do {
-		Vector Ap = A * p;
-		double alpha = res_old / (p.dot(Ap));
+		Vector<ValueType> Ap = A * p;
+		ValueType alpha = res_old / (p.dot(Ap));
 		x = x + (p * alpha);
 		r = r - (Ap * alpha);
 		res_new = r.dot(r);
@@ -59,6 +68,5 @@ int ConjugateGradient(const AbstractMatrix& A, const Vector& b, Vector& x,
 
 	return iter;
 }
-
 
 #endif /* CONJUGATEGRADIENT_HPP_ */

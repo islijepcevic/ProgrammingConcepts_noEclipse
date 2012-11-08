@@ -31,4 +31,3 @@ int ConjugateGradient(const AbstractMatrix& A,
                                      const int maxIter);
 
 #endif /* CONJUGATEGRADIENT_HPP_ */
-

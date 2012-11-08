@@ -51,4 +51,3 @@ int ConjugateGradient(const AbstractMatrix& A,
 
     return iter;
 }
-

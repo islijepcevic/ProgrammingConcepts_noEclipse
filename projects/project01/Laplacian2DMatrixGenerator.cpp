@@ -70,12 +70,11 @@ void Laplacian2DMatrixGenerator(AbstractMatrix*& M,
 	if (! storageType.compare("dense")) {
 		M = new DenseMatrix(N);
 	};
+        
 	// Uncomment this block of code after you've implemented the CrsMatrix class
-	/*
 	if (! storageType.compare("csr")) {
 		M = new CsrMatrix(N, 5 * N);
 	};
-	*/
 
 	double h = 1.0 / static_cast<double>(npoints - 1);
 	double diagValue = 4.0 / (h * h);
@@ -86,10 +85,8 @@ void Laplacian2DMatrixGenerator(AbstractMatrix*& M,
 	}
 
 	// Also uncomment this block, it's absolutely necessary
-	/*
 	if (! storageType.compare("csr")) {
 		CsrMatrix* CsrM = dynamic_cast<CsrMatrix*>(M);
 		CsrM->Lock();
 	};
-	*/
 }

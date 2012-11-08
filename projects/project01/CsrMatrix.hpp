@@ -43,8 +43,12 @@ public:
 
 	// Set method
 	// Implementation of pure virtual method
+        // expects that elements are added in increasing order of the indices
 	void SetElement(const unsigned long row, const unsigned long col,
 			 	    const double value);
+
+        // gets the element of given row and col
+        double GetElement(const unsigned long row, const unsigned long col);
 
 	// Operators
 	// The Lock() method must be called before using this operator
@@ -70,6 +74,9 @@ public:
 	std::vector<unsigned long> mFnz;
 	// Values - sra for CSR
 	std::vector<double> mValues;
+
+        // locked flag
+        bool locked;
 };
 
 #endif /* CSRMATRIX_HPP_ */

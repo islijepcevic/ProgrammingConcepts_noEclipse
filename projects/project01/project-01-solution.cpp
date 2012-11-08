@@ -21,21 +21,21 @@
 #include "Vector.hpp"
 #include "AbstractMatrix.hpp"
 #include "Laplacian2DMatrixGenerator.hpp"
-#include "ConjugateGradientDenseMatrix.hpp"
+#include "ConjugateGradient.hpp"
 #include "WallClock.hpp"
 
 int main(int argc, char* argv[])
 {
 	if (argc != 5) {
 		std::cout << "Missing parameters. Please run as: \n"
-				  << "  ./project-01-solution <npoints> <tol> <maxiter> <storage> with:\n"
-				  << "\n<npoints> the number of grid points on the side of the"
-				  << "regular square grid\n"
-				  << "\n<tol> the desired accuracy for the CG solver\n"
-				  << "\n<maxiter> the maximum number of iterations\n"
-				  << "\n<storage> dense or csr (choose dense until you've "
-				  << "implemented the CsrMatrix class)"
-				  << std::endl;
+                  << "  ./project-01-solution <npoints> <tol> <maxiter> <storage> with:\n"
+                  << "\n<npoints> the number of grid points on the side of the"
+                  << "regular square grid\n"
+                  << "\n<tol> the desired accuracy for the CG solver\n"
+                  << "\n<maxiter> the maximum number of iterations\n"
+                  << "\n<storage> dense or csr (choose dense until you've "
+                  << "implemented the CsrMatrix class)"
+                  << std::endl;
 		return 1;
 	}
 
@@ -76,12 +76,13 @@ int main(int argc, char* argv[])
 	Laplacian2DMatrixGenerator(A, nx, storageType);
 
 	// Solve the system Ax = b;
+
 	// Uncomment this line after you've implemented ConjugateGradient
-	// int numIter = ConjugateGradient(*A, b, u, tol, maxIter);
+	int numIter = ConjugateGradient(*A, b, u, tol, maxIter);
 
 	// and remove the following two lines.
-	DenseMatrix* DenseA = dynamic_cast<DenseMatrix*>(A);
-	int numIter = ConjugateGradientDenseMatrix(*DenseA, b, u, tol, maxIter);
+	//DenseMatrix* DenseA = dynamic_cast<DenseMatrix*>(A);
+	//int numIter = ConjugateGradientDenseMatrix(*DenseA, b, u, tol, maxIter);
 
 	timer.stop();
 

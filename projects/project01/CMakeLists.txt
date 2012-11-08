@@ -11,4 +11,6 @@ add_executable(project-01-solution project-01-solution.cpp
                DenseMatrix.cpp
                Laplacian2DMatrixGenerator.cpp
                ConjugateGradientDenseMatrix.cpp
-               WallClock.cpp)
+               WallClock.cpp
+               CsrMatrix.cpp
+               ConjugateGradient.cpp)

@@ -10,6 +10,7 @@ add_subdirectory(chapter-06)
 add_subdirectory(chapter-07)
 add_subdirectory(chapter-08)
 add_subdirectory(chapter-09)
+add_subdirectory(chapter-10)
 
 add_subdirectory(quiz-solutions)
 add_subdirectory(projects)

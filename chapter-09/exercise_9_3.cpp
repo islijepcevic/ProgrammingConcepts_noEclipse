@@ -48,10 +48,10 @@ int main(int argc, char *argv[]) {
 
             h /= 2;
 
-            if (h < 1e-8) {
-                std::cout << "h too small, terminating\n";
-                cont = false;
-            }
+            //if (h < 1e-8) {
+            //    std::cout << "h too small, terminating\n";
+            //    cont = false;
+            //}
         }
     }
 

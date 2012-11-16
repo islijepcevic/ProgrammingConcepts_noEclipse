@@ -120,4 +120,36 @@ void DenseMatrix<ValueType>::Print(std::ostream& s)
 	}
 }
 
+template<typename ValueType>
+Vector<ValueType> DenseMatrix<ValueType>::ApplyUpperTr(
+		const Vector<ValueType>& v) const
+{
+	Vector<ValueType> w(mSize);
+
+	for (unsigned long i = 0; i < mSize; ++i) {
+		for (unsigned long j = i + 1; j < mSize; ++j) {
+			w[i] += mMatrix[i][j] * v[j];
+		}
+	}
+
+	return w;
+}
+
+template<typename ValueType>
+Vector<ValueType> DenseMatrix<ValueType>::ApplyInvLowerTr(
+		const Vector<ValueType>& v) const
+{
+	Vector<ValueType> w(mSize);
+
+	for (unsigned long i = 0; i < mSize; ++i) {
+		w[i] = v[i];
+		for (unsigned long j = 0; j < i; ++j) {
+			w[i] -= mMatrix[i][j] * w[j];
+		}
+		w[i] /= mMatrix[i][i];
+	}
+
+	return w;
+}
+
 #endif /* DENSEMATRIX_HPP_ */

@@ -33,6 +33,29 @@ int GaussSeidel(const AbstractMatrix<ValueType>& A,
 				const ValueType tol,
 				const int maxIter)
 {
+	Vector<ValueType> r(b.GetSize());
+	ValueType res_norm;
+
+	int iter = 0;
+	do {
+		x = A.ApplyInvLowerTr(b - A.ApplyUpperTr(x));
+
+		r = b - A * x;
+		res_norm = r.norm();
+
+		iter++;
+
+		std::cout << "Iteration: " << iter << " , " << "res = " << res_norm
+				  << "\n";
+	} while ((res_norm > tol) && iter < maxIter);
+
+	if (iter >= maxIter) {
+		std::cout << "Maximum number of iterations reached without convergence."
+				  << "\nAborting." << std::endl;
+		return -iter;
+	}
+
+	return iter;
 }
 
 #endif /* GAUSSSEIDEL_HPP_ */

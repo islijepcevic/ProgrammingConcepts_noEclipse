@@ -9,35 +9,32 @@
 
 #include <cmath>
 #include <iostream>
-#include <cassert>
+//#include <cassert>
 
 #include "Vector.hpp"
+#include "../exceptions/OutOfBoundsException.hpp"
+#include "../exceptions/SizeException.hpp"
 
 /*
  * Overridden copy constructor
  * Allocates memory for new vector, and copies entries of other vector into it
  */
-Vector::Vector(const Vector& otherVector)
+Vector::Vector(const Vector& otherVector) :
+    mSize(otherVector.mSize), 
+    mData(otherVector.mData)
 {
-    mSize = otherVector.mSize;
-    mData = new double [mSize];
-    for (int i = 0; i < mSize; i++) {
-        mData[i] = otherVector.mData[i];
-    }
 }
 
 /*
  * Constructor for vector of a given size
  * Allocates memory, initialises entries to zero
  */
-Vector::Vector(int size)
+Vector::Vector(int size) :
+    mSize(size),
+    mData(size,0)
 {
-    assert(size > 0);
-    mSize = size;
-    mData = new double [mSize];
-    for (int i = 0; i < mSize; i++) {
-        mData[i] = 0.0;
-    }
+    // no assertion or exception needed
+    // std::vector will throw std::bad_alloc
 }
 
 /*
@@ -45,7 +42,6 @@ Vector::Vector(int size)
  */
 Vector::~Vector() 
 {
-    delete[] mData;
 }
 
 /*
@@ -63,48 +59,68 @@ int Vector::getSize() const {
  */
 double& Vector::operator[](int i) {
 
-    assert(i >= 0);
-    assert(i < mSize);
+    if (i < 0 || i >= mSize) {
+        throw (OutOfBoundsException("indexing a vector out of its bounds"));
+    }
+
+    return mData[i];
+}
+
+/*
+ * Overloading square brackets, const version,
+ * return of const double reference guarantees that the method is const
+ * Note that this is actually not needed to compile
+ * zero-based indexing
+ */
+double Vector::operator[](int i) const {
+
+    if (i < 0 || i >= mSize) {
+        throw (OutOfBoundsException("indexing a vector out of its bounds"));
+    }
 
     return mData[i];
 }
 
 /*
  * Read-only variant of []
+ * REPLACED BY operator[] const
  * Note that this uses 'zero-based' indexing, and a check on the validity of
  * the index
  */
-double Vector::read(int i) const {
-
-    assert(i >= 0);
-    assert(i < mSize);
-
-    return mData[i];
-}
+//double Vector::read(int i) const {
+//
+//    assert(i >= 0);
+//    assert(i < mSize);
+//
+//    return mData[i];
+//}
 
 /*
  * Overloading round brackets
+ * DEPRECATED
  * Note that this uses 'one-based' indexyng, and a check on the validity of
  * the index
  */
-double& Vector::operator() (int i) {
-
-    assert(i >= 1);
-    assert(i <= mSize);
-
-    return mData[i-1];
-}
+//double& Vector::operator() (int i) {
+//
+//    assert(i >= 1);
+//    assert(i <= mSize);
+//
+//    return mData[i-1];
+//}
 
 /*
  * Overloading the assignment operator
  */
 Vector& Vector::operator=(const Vector& otherVector) {
 
-    assert(mSize == otherVector.mSize);
+    if (mSize != otherVector.mSize) {
+        throw (VectorSizeException("assigning a vector of different size"));
+    }
 
     for (int i = 0; i < mSize; i++) {
 
-        mData[i] = otherVector.read(i);
+        mData[i] = otherVector[i];
     }
 
     return *this;
@@ -128,7 +144,9 @@ Vector Vector::operator-() const {
  */
 Vector Vector::operator+(const Vector& v1) const {
 
-    assert(mSize == v1.mSize);
+    if (mSize != v1.mSize) {
+        throw (VectorSizeException("adding vectors of different size"));
+    }
 
     Vector v(mSize);
     for (int i = 0; i < mSize; i++) {
@@ -179,8 +197,9 @@ double Vector::calculateNorm(int p) const {
 
 /*
  * MATLAB style friend to get the size of a vector
+ * MOVED TO ANOTHER FILE
  */
-int length(const Vector& v) {
-
-    return v.mSize;
-}
+//int length(const Vector& v) {
+//
+//    return v.mSize;
+//}

@@ -7,16 +7,15 @@
  *              12 Nov, 2012
  */
 
-// std::vector instead double*
-// shortened constructors Vector(...) : ... {...}
-
 #ifndef VECTORHEADERDEF
 #define VECTORHEADERDEF
 
+#include <vector>
+
 class Vector {
 private:
-    double* mData;  // data stored in vector
     int mSize;      // size of vector
+    std::vector<double> mData;  // data stored in vector
 
 public:
     Vector(const Vector& otherVector);
@@ -25,8 +24,13 @@ public:
 
     int getSize() const;
     double& operator[](int i);  // zero-based indexing
-    double read(int i) const;   // read-only zero-based indexing
-    double& operator() (int i); // one-based indexing
+    double operator[](int i) const; // constant [] operator, zero-based
+    
+    // read-only zero-based indexing; replaced by operator[] const
+    //double read(int i) const;   
+    
+    // REDUNDANT AND CONFUSING
+    //double& operator() (int i); // one-based indexing
 
     Vector& operator=(const Vector& otherVector);   // assignment operator
     Vector operator-() const;   // unary -
@@ -36,10 +40,8 @@ public:
 
     double calculateNorm(int p = 2) const;  // p-norm method
 
-    friend int length(const Vector& v); // declare length function as a friend
+    // moved to another file because this is not the functionality of this class
+    //friend int length(const Vector& v); // declare length function as a friend
 };
-
-// Prototype signature of length() friend function
-//int length(const Vector& v);
 
 #endif // VECTORHEADERDEF

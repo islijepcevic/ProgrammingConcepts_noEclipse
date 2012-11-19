@@ -94,7 +94,7 @@ void DenseMatrix<ValueType>::SetElement(const unsigned long row,
 
 template<typename ValueType>
 Vector<ValueType>
-DenseMatrix<ValueType>::operator *(const Vector<ValueType>& v) const
+DenseMatrix<ValueType>::operator*(const Vector<ValueType>& v) const
 {
 	Vector<ValueType> w(mSize);
 
@@ -118,18 +118,6 @@ void DenseMatrix<ValueType>::Print(std::ostream& s)
 		}
 		s << std::endl;
 	}
-}
-
-template<typename ValueType>
-Vector<ValueType> DenseMatrix<ValueType>::ApplyUpperTr(
-		const Vector<ValueType>& v) const
-{
-}
-
-template<typename ValueType>
-Vector<ValueType> DenseMatrix<ValueType>::ApplyInvLowerTr(
-		const Vector<ValueType>& v) const
-{
 }
 
 #endif /* DENSEMATRIX_HPP_ */

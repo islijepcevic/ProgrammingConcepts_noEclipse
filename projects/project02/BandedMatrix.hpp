@@ -39,6 +39,32 @@ public:
 	void SetElement(const int row, const int col,
 			 	    const ValueType value);
 
+	// Methods for direct solvers
+
+	/* Compute the Cholesky factorization, such that A = RR^T
+	 * Parameters:
+	 *    R : a pointer to AbstractMatrix passed as reference.
+	 *        The method assumes that R is null at imput
+	 *        and allocates a new AbstractMatrix of whichever type needed
+	 */
+	void CholeskyFactorization(AbstractMatrix<ValueType>*& R);
+
+	/*
+	 *  In the case that the object is a a lower triangular factor, apply
+	 *  its inverse to a vector, such that w = L^-1 v
+	 *
+	 *  This represents a forward substitution solve
+	 */
+	Vector<ValueType> ApplyLowerInv(const Vector<ValueType>& v);
+
+	/*
+	 *  In the case that the object is a a lower triangular factor, apply
+	 *  the inverse of its transpose to a vector, such that w = (L^T)^-1 v
+	 *
+	 *  This represents a back substitution solve using the transpose
+	 */
+	Vector<ValueType> ApplyLowerTranspInv(const Vector<ValueType>& v);
+
 	// Operators
 	Vector<ValueType> operator*(const Vector<ValueType>& v) const;
 
@@ -95,6 +121,76 @@ void BandedMatrix<ValueType>::SetElement(const int row,
 	mMatrix[row][col - row] = value;
 }
 
+template<typename ValueType>
+void BandedMatrix<ValueType>::CholeskyFactorization(
+		AbstractMatrix<ValueType>*& R)
+{
+	// Need to first create a pointer to the DenseMatrix. Otherwise I can not work
+	// with the entries.
+
+
+	BandedMatrix<ValueType>* BandedR =
+			new BandedMatrix<ValueType>(mSize, mP, 0);
+
+	ValueType** r(BandedR->mMatrix);
+
+	for (int i = 0; i < mSize; ++i) {
+		int ip = std::max(i - mP, 0);
+		for (int j = ip; j < i + 1; ++j) {
+			ValueType s = 0;
+			for (int k = ip; k < j; ++k) {
+				s += r[i][k - i] * r[j][k - j];
+			}
+			r[i][j - i] =
+					(i == j) ?
+					std::sqrt(mMatrix[i][0] - s) :
+					(1.0 / r[j][0] * (mMatrix[i][j - i] - s)
+						 );
+		}
+	}
+
+	R = BandedR;
+}
+
+template<typename ValueType>
+Vector<ValueType>
+BandedMatrix<ValueType>::ApplyLowerInv(const Vector<ValueType>& v)
+{
+	Vector<ValueType> w(mSize);
+
+	for (int i = 0; i < mSize; ++i) {
+		w[i] = v[i];
+		int ip = std::max(i - mP, 0);
+		for (int j = ip; j < i; ++j) {
+			w[i] -= mMatrix[i][j - i] * w[j];
+		}
+		w[i] /= mMatrix[i][0];
+	}
+
+	return w;
+}
+
+template<typename ValueType>
+Vector<ValueType>
+BandedMatrix<ValueType>::ApplyLowerTranspInv(const Vector<ValueType>& v)
+{
+	Vector<ValueType> w(mSize);
+
+	for (int i = mSize - 1; i >= 0; --i) {
+		w[i] = v[i];
+		/*
+		 *  We are transposing the lower triangular matrix. mR is 0, so we
+		 *  are using mP for the maximum value of j
+		 */
+		int ir = std::min(i + mP, mSize - 1);
+		for (int j = i + 1; j < ir + 1; ++j) {
+			w[i] -= mMatrix[j][i - j] * w[j];
+		}
+		w[i] /= mMatrix[i][0];
+	}
+
+	return w;
+}
 
 // Operators
 

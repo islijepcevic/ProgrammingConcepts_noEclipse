@@ -1,7 +1,7 @@
 /*
  * project-02-solution.cpp
  *
- * Solver for 2D Laplacian problem on a square regular
+ * Cholesky solver for 2D Laplacian problem on a square regular
  * grid.
  *
  * Laplacian(u) = 0; u(x,0) = 1;
@@ -21,6 +21,7 @@
 #include "AbstractMatrix.hpp"
 #include "Laplacian2DMatrixGenerator.hpp"
 #include "ConjugateGradient.hpp"
+#include "CholeskySolver.hpp"
 #include "WallClock.hpp"
 
 typedef double Scalar;
@@ -87,7 +88,24 @@ int main(int argc, char* argv[])
 	std::cout << "Time to solution with the CG solver is: "
 			  << timer.elapsedTime() << std::endl;
 
+
+	// Solve the system Ax = b with the Cholesky solver
+	timer.start();
+
+	AbstractDirectSolver<Scalar>* cholSolver = new CholeskySolver<Scalar>();
+	cholSolver->Factorize(*A);
+	cholSolver->Solve(uChol, b);
+
+	timer.stop();
+
+	std::cout << "Solution with Cholesky solver is:\n";
+	uChol.Print();
+
+	std::cout << "Time to solution with the Cholesky solver is: "
+			  << timer.elapsedTime() << std::endl;
+
 	// Clean up
+	delete cholSolver;
 	delete A;
 
     return 0;

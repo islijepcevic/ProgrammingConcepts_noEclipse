@@ -34,6 +34,31 @@ public:
 	virtual void SetElement(const int row, const int col,
 			 	    		   const ValueType value) = 0;
 
+	// Methods for direct solvers
+	/* Compute the Cholesky factorization, such that A = RR^T
+	 * Parameters:
+	 *    R : a pointer to AbstractMatrix passed as reference.
+	 *        The method assumes that R is null at imput
+	 *        and allocates a new AbstractMatrix of whichever type needed
+	 */
+	virtual void CholeskyFactorization(AbstractMatrix<ValueType>*& R) = 0;
+
+	/*
+	 *  In the case that the object is a a lower triangular factor, apply
+	 *  its inverse to a vector, such that w = L^-1 v
+	 *
+	 *  This represents a forward substitution solve
+	 */
+	virtual Vector<ValueType> ApplyLowerInv(const Vector<ValueType>& v) = 0;
+
+	/*
+	 *  In the case that the object is a a lower triangular factor, apply
+	 *  the inverse of its transpose to a vector, such that w = (L^T)^-1 v
+	 *
+	 *  This represents a back substitution solve using the transpose
+	 */
+	virtual Vector<ValueType> ApplyLowerTranspInv(const Vector<ValueType>& v) = 0;
+
 	// Operators
 	/*
 	 * Allows performing w = M * v, with v,w of type Vector

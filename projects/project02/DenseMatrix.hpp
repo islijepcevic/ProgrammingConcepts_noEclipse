@@ -33,6 +33,32 @@ public:
 	void SetElement(const int row, const int col,
 			 	    const ValueType value);
 
+	// Methods for direct solvers
+
+	/* Compute the Cholesky factorization, such that A = RR^T
+	 * Parameters:
+	 *    R : a pointer to AbstractMatrix passed as reference.
+	 *        The method assumes that R is null at imput
+	 *        and allocates a new AbstractMatrix of whichever type needed
+	 */
+	void CholeskyFactorization(AbstractMatrix<ValueType>*& R);
+
+	/*
+	 *  In the case that the object is a a lower triangular factor, apply
+	 *  its inverse to a vector, such that w = L^-1 v
+	 *
+	 *  This represents a forward substitution solve
+	 */
+	Vector<ValueType> ApplyLowerInv(const Vector<ValueType>& v);
+
+	/*
+	 *  In the case that the object is a a lower triangular factor, apply
+	 *  the inverse of its transpose to a vector, such that w = (L^T)^-1 v
+	 *
+	 *  This represents a back substitution solve using the transpose
+	 */
+	Vector<ValueType> ApplyLowerTranspInv(const Vector<ValueType>& v);
+
 	// Operators
 	Vector<ValueType> operator*(const Vector<ValueType>& v) const;
 
@@ -77,6 +103,70 @@ void DenseMatrix<ValueType>::SetElement(const int row,
 							 const ValueType value)
 {
 	mMatrix[row][col] = value;
+}
+
+// Methods for direct solvers
+
+template<typename ValueType>
+void DenseMatrix<ValueType>::CholeskyFactorization(
+		AbstractMatrix<ValueType>*& R)
+{
+	// Need to first create a pointer to the DenseMatrix. Otherwise I can not work
+	// with the entries.
+
+	DenseMatrix<ValueType>* DenseR = new DenseMatrix<ValueType>(mSize);
+
+	std::vector<std::vector<ValueType> >& r (DenseR->mMatrix);
+
+	for (int i = 0; i < mSize; ++i) {
+		for (int j = 0; j < i + 1; ++j) {
+			ValueType s = 0;
+			for (int k = 0; k < j; ++k) {
+				s += r[i][k] * r[j][k];
+			}
+			r[i][j] =
+					(i == j) ?
+					std::sqrt(mMatrix[i][i] - s) :
+					( 1.0 / r[j][j] * (mMatrix[i][j] - s) );
+		}
+	}
+
+	R = DenseR;
+}
+
+template<typename ValueType>
+Vector<ValueType> DenseMatrix<ValueType>::ApplyLowerInv(
+		const Vector<ValueType>& v)
+{
+	Vector<ValueType> w(mSize);
+
+	for (int i = 0; i < mSize; ++i) {
+		w[i] = v[i];
+		for (int j = 0; j < i; ++j) {
+			w[i] -= mMatrix[i][j] * w[j];
+		}
+		w[i] /= mMatrix[i][i];
+	}
+
+	return w;
+}
+
+template<typename ValueType>
+Vector<ValueType> DenseMatrix<ValueType>::ApplyLowerTranspInv(
+		const Vector<ValueType>& v)
+{
+	Vector<ValueType> w(mSize);
+
+	for (int i = 0; i < mSize; ++i) {
+		int row = mSize - i - 1;
+		w[row] = v[row];
+		for (int j = row + 1; j < mSize; ++j) {
+			w[row] -= mMatrix[j][row] * w[j];
+		}
+		w[row] /= mMatrix[row][row];
+	}
+
+	return w;
 }
 
 // Operators

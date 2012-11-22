@@ -45,6 +45,10 @@ public:
 	 */
 	void CholeskyFactorization(AbstractMatrix<ValueType>*& R) const;
 
+	// Compute the LU factorization, such that A = LU
+	void LUFactorization(AbstractMatrix<ValueType>*& L,
+						 AbstractMatrix<ValueType>*& U);
+
 	/*
 	 *  In the case that the object is a a lower triangular factor, apply
 	 *  its inverse to a vector, such that w = L^-1 v
@@ -60,6 +64,14 @@ public:
 	 *  This represents a back substitution solve using the transpose
 	 */
 	Vector<ValueType> ApplyLowerTranspInv(const Vector<ValueType>& v) const;
+
+	/*
+	 *  In the case that the object is a an upper triangular factor, apply
+	 *  its inverse to a vector, such that w = U^-1 v
+	 *
+	 *  This represents a back substitution solve
+	 */
+	Vector<ValueType> ApplyUpperInv(const Vector<ValueType>& v);
 
 	// Operators
 	Vector<ValueType> operator*(const Vector<ValueType>& v) const;
@@ -161,6 +173,39 @@ void DenseMatrix<ValueType>::CholeskyFactorization(
 }
 
 template<typename ValueType>
+void DenseMatrix<ValueType>::LUFactorization(
+		AbstractMatrix<ValueType>*& L, AbstractMatrix<ValueType>*& U)
+{
+	DenseMatrix<ValueType>* DenseL = new DenseMatrix<ValueType>(mSize);
+	DenseMatrix<ValueType>* DenseU = new DenseMatrix<ValueType>(mSize);
+
+	std::vector<std::vector<ValueType> >& l(DenseL->mMatrix);
+	std::vector<std::vector<ValueType> >& u(DenseU->mMatrix);
+
+	for (int k = 0; k < mSize; ++k) {
+		l[k][k] = 1.0;
+		for (int i = 0; i <= k; ++i) {
+			double s = 0.0;
+			for (int j = 0; j < i; ++j) {
+				s += u[j][k] * l[i][j];
+			}
+			u[i][k] = mMatrix[i][k] - s;
+		}
+		for (int i = k; i < mSize; ++i) {
+			double s = 0.0;
+			for (int j = 0; j < k; ++j) {
+				s += u[j][k] * l[i][j];
+			}
+			l[i][k] = (mMatrix[i][k] - s) / u[k][k];
+		}
+	}
+
+	L = DenseL;
+	U = DenseU;
+}
+
+
+template<typename ValueType>
 Vector<ValueType> DenseMatrix<ValueType>::ApplyLowerInv(
 		const Vector<ValueType>& v) const
 {
@@ -188,6 +233,24 @@ Vector<ValueType> DenseMatrix<ValueType>::ApplyLowerTranspInv(
 		w[row] = v[row];
 		for (int j = row + 1; j < mSize; ++j) {
 			w[row] -= mMatrix[j][row] * w[j];
+		}
+		w[row] /= mMatrix[row][row];
+	}
+
+	return w;
+}
+
+template<typename ValueType>
+Vector<ValueType> DenseMatrix<ValueType>::ApplyUpperInv(
+		const Vector<ValueType>& v)
+{
+	Vector<ValueType> w(mSize);
+
+	for (int i = 0; i < mSize; ++i) {
+		int row = mSize - i - 1;
+		w[row] = v[row];
+		for (int j = row + 1; j < mSize; ++j) {
+			w[row] -= mMatrix[row][j] * w[j];
 		}
 		w[row] /= mMatrix[row][row];
 	}

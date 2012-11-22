@@ -51,6 +51,10 @@ public:
 	 */
 	void CholeskyFactorization(AbstractMatrix<ValueType>*& R) const;
 
+	// Compute the LU factorization, such that A = LU
+	void LUFactorization(AbstractMatrix<ValueType>*& L,
+						 AbstractMatrix<ValueType>*& U);
+
 	/*
 	 *  In the case that the object is a a lower triangular factor, apply
 	 *  its inverse to a vector, such that w = L^-1 v
@@ -66,6 +70,14 @@ public:
 	 *  This represents a back substitution solve using the transpose
 	 */
 	Vector<ValueType> ApplyLowerTranspInv(const Vector<ValueType>& v) const;
+
+	/*
+	 *  In the case that the object is a an upper triangular factor, apply
+	 *  its inverse to a vector, such that w = U^-1 v
+	 *
+	 *  This represents a back substitution solve
+	 */
+	Vector<ValueType> ApplyUpperInv(const Vector<ValueType>& v);
 
 	// Operators
 	Vector<ValueType> operator*(const Vector<ValueType>& v) const;
@@ -175,6 +187,19 @@ void BandedMatrix<ValueType>::CholeskyFactorization(
 }
 
 template<typename ValueType>
+void BandedMatrix<ValueType>::LUFactorization(
+		AbstractMatrix<ValueType>*& L, AbstractMatrix<ValueType>*& U)
+{
+	BandedMatrix<ValueType>* BandedL =
+			new BandedMatrix<ValueType>(mSize, mP, 0);
+	BandedMatrix<ValueType>* BandedU =
+			new BandedMatrix<ValueType>(mSize, 0, mR);
+
+	L = BandedL;
+	U = BandedU;
+}
+
+template<typename ValueType>
 Vector<ValueType>
 BandedMatrix<ValueType>::ApplyLowerInv(const Vector<ValueType>& v) const
 {
@@ -210,6 +235,15 @@ BandedMatrix<ValueType>::ApplyLowerTranspInv(const Vector<ValueType>& v) const
 		}
 		w[i] /= mMatrix[i][0];
 	}
+
+	return w;
+}
+
+template<typename ValueType>
+Vector<ValueType>
+BandedMatrix<ValueType>::ApplyUpperInv(const Vector<ValueType>& v)
+{
+	Vector<ValueType> w(mSize);
 
 	return w;
 }

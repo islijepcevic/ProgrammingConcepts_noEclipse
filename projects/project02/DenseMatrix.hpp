@@ -176,27 +176,21 @@ template<typename ValueType>
 void DenseMatrix<ValueType>::LUFactorization(
 		AbstractMatrix<ValueType>*& L, AbstractMatrix<ValueType>*& U)
 {
+	// We create a zeroed matrix to store the L factor
 	DenseMatrix<ValueType>* DenseL = new DenseMatrix<ValueType>(mSize);
-	DenseMatrix<ValueType>* DenseU = new DenseMatrix<ValueType>(mSize);
+	// We create the U factor as a copy of the matrix
+	DenseMatrix<ValueType>* DenseU = new DenseMatrix<ValueType>(*this);
 
 	std::vector<std::vector<ValueType> >& l(DenseL->mMatrix);
 	std::vector<std::vector<ValueType> >& u(DenseU->mMatrix);
 
 	for (int k = 0; k < mSize; ++k) {
 		l[k][k] = 1.0;
-		for (int i = 0; i <= k; ++i) {
-			double s = 0.0;
-			for (int j = 0; j < i; ++j) {
-				s += u[j][k] * l[i][j];
+		for (int i = k + 1; i < mSize; ++i) {
+			l[i][k] = u[i][k] / u[k][k];
+			for (int j = k + 1; j < mSize; ++j) {
+				u[i][j] -= l[i][k] * u[k][j];
 			}
-			u[i][k] = mMatrix[i][k] - s;
-		}
-		for (int i = k; i < mSize; ++i) {
-			double s = 0.0;
-			for (int j = 0; j < k; ++j) {
-				s += u[j][k] * l[i][j];
-			}
-			l[i][k] = (mMatrix[i][k] - s) / u[k][k];
 		}
 	}
 

@@ -109,7 +109,7 @@ int main(int argc, char* argv[])
 
 	Vector<Scalar> diff(uChol - uCG);
 
-	std::cout << "norm of the difference between Choleski and CG = "
+	std::cout << "Norm of the difference between Choleski and CG = "
 			<< diff.norm() << std::endl;
 
 	// Solve the system Ax = b with the LU solver
@@ -129,7 +129,7 @@ int main(int argc, char* argv[])
 
 	diff = uLU - uCG;
 
-	std::cout << "norm of the difference between LU and CG = "
+	std::cout << "Norm of the difference between LU and CG = "
 			  << diff.norm() << std::endl;
 
 	// Clean up

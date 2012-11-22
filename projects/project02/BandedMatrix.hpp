@@ -193,7 +193,30 @@ void BandedMatrix<ValueType>::LUFactorization(
 	BandedMatrix<ValueType>* BandedL =
 			new BandedMatrix<ValueType>(mSize, mP, 0);
 	BandedMatrix<ValueType>* BandedU =
-			new BandedMatrix<ValueType>(mSize, 0, mR);
+			new BandedMatrix<ValueType>(*this);
+
+	ValueType** l(BandedL->mMatrix);
+	ValueType** u(BandedU->mMatrix);
+
+	for (int k = 0; k < mSize; ++k) {
+		l[k][0] = 1.0;
+		int ip = std::max(k - mP, 0);
+		for (int i = ip; i <= k; ++i) {
+			double s = 0.0;
+			for (int j = ip; j < i; ++j) {
+				s += u[j][k - j] * l[i][j - i];
+			}
+			u[i][k - i] = mMatrix[i][k - i] - s;
+		}
+		int ir = std::min(k + mR, mSize -1);
+		for (int i = k; i < ir + 1; ++i) {
+			double s = 0.0;
+			for (int j = ip; j < k; ++j) {
+				s += u[j][k - j] * l[i][j - i];
+			}
+			l[i][k - i] = (mMatrix[i][k - i] - s) / u[k][0];
+		}
+	}
 
 	L = BandedL;
 	U = BandedU;
@@ -244,6 +267,15 @@ Vector<ValueType>
 BandedMatrix<ValueType>::ApplyUpperInv(const Vector<ValueType>& v)
 {
 	Vector<ValueType> w(mSize);
+
+	for (int i = mSize - 1; i >= 0; --i) {
+		w[i] = v[i];
+		int ir = std::min(i + mR, mSize - 1);
+		for (int j = i + 1; j < ir + 1; ++j) {
+			w[i] -= mMatrix[i][j - i] * w[j];
+		}
+		w[i] /= mMatrix[i][0];
+	}
 
 	return w;
 }

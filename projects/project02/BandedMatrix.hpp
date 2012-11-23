@@ -133,20 +133,24 @@ void BandedMatrix<ValueType>::CholeskyFactorization(
 			new BandedMatrix<ValueType>(mSize, mP, 0);
 
 	ValueType** r(BandedR->mMatrix);
+	ValueType s;
 
 	for (int i = 0; i < mSize; ++i) {
 		int ip = std::max(i - mP, 0);
-		for (int j = ip; j < i + 1; ++j) {
-			ValueType s = 0;
+		for (int j = ip; j < i; ++j) {
+			s = 0;
 			for (int k = ip; k < j; ++k) {
 				s += r[i][k - i] * r[j][k - j];
 			}
-			r[i][j - i] =
-					(i == j) ?
-					std::sqrt(mMatrix[i][0] - s) :
-					(1.0 / r[j][0] * (mMatrix[i][j - i] - s)
-						 );
+			r[i][j - i] = (mMatrix[i][j - i] - s) / r[j][0];
 		}
+
+		s = 0;
+		for (int k = ip; k < i; ++k) {
+			s += r[i][k - i] * r[i][k - i];
+		}
+		r[i][0] = std::sqrt(mMatrix[i][0] - s);
+
 	}
 
 	R = BandedR;

@@ -49,8 +49,8 @@ int ConjugateGradient(const AbstractMatrix<ValueType>& A,
 		res_old = res_new;
 		iter++;
 
-		std::cout << "Iteration: " << iter << " , " << "res = " << res_new
-				  << "\n";
+		// std::cout << "Iteration: " << iter << " , " << "res = " << res_new
+		//		  << "\n";
 	} while ((res_new > tol) && iter < maxIter);
 
 	if (iter >= maxIter) {

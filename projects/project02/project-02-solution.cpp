@@ -82,8 +82,8 @@ int main(int argc, char* argv[])
 
 	std::cout << "CG reached solution after " << numIter << " iterations:\n";
 
-	std::cout << "Solution with CG solver is:\n";
-	uCG.Print();
+	// std::cout << "Solution with CG solver is:\n";
+	// uCG.Print();
 
 	std::cout << "Time to solution with the CG solver is: "
 			  << timer.elapsedTime() << std::endl;
@@ -98,11 +98,16 @@ int main(int argc, char* argv[])
 
 	timer.stop();
 
-	std::cout << "Solution with Cholesky solver is:\n";
-	uChol.Print();
-
 	std::cout << "Time to solution with the Cholesky solver is: "
 			  << timer.elapsedTime() << std::endl;
+
+	//std::cout << "Solution with Cholesky solver is:\n";
+	// uChol.Print();
+
+	Vector<Scalar> diff(uChol - uCG);
+
+	std::cout << "norm of the difference between Choleski and CG = "
+			<< diff.norm() << std::endl;
 
 	// Clean up
 	delete cholSolver;

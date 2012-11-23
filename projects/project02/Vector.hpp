@@ -42,6 +42,9 @@ public:
 	ValueType& operator[](const int i);
 	// Dot product of two vectors
 	ValueType dot(const Vector& v) const;
+	// Euclidean norm of vector
+	ValueType norm() const;
+
 
 	// Public methods
 	void Print(std::ostream& s = std::cout);
@@ -137,6 +140,13 @@ ValueType Vector<ValueType>::dot(const Vector& v) const
 
 	return p;
 }
+
+template<typename ValueType>
+ValueType Vector<ValueType>::norm() const
+{
+	return std::sqrt(dot(*this));
+}
+
 
 template<typename ValueType>
 void Vector<ValueType>::Print(std::ostream& s)

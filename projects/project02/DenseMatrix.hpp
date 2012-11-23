@@ -133,14 +133,14 @@ void DenseMatrix<ValueType>::CholeskyFactorization(
 				s += r[i][k] * r[j][k];
 			}
 
-			r[i][j] = (mMatrix[i][j] - s) / r[j][j];
+			r[i][j] = (a[i][j] - s) / r[j][j];
 		}
 		s = 0;
 		for (int k = 0; k < i; ++k) {
 					s += r[i][k] * r[i][k];
 		}
 
-		r[i][i] = mMatrix[i][i] - s;
+		r[i][i] = a[i][i] - s;
 
 		// Check that the entries are positive
 		assert(r[i][i] > 0); //matrix has to be positive definite!

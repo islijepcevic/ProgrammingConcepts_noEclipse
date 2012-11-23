@@ -38,10 +38,10 @@ public:
 	/* Compute the Cholesky factorization, such that A = RR^T
 	 * Parameters:
 	 *    R : a pointer to AbstractMatrix passed as reference.
-	 *        The method assumes that R is null at imput
+	 *        The method assumes that R is null at input
 	 *        and allocates a new AbstractMatrix of whichever type needed
 	 */
-	virtual void CholeskyFactorization(AbstractMatrix<ValueType>*& R) = 0;
+	virtual void CholeskyFactorization(AbstractMatrix<ValueType>*& R) const = 0;
 
 	/*
 	 *  In the case that the object is a a lower triangular factor, apply
@@ -49,7 +49,7 @@ public:
 	 *
 	 *  This represents a forward substitution solve
 	 */
-	virtual Vector<ValueType> ApplyLowerInv(const Vector<ValueType>& v) = 0;
+	virtual Vector<ValueType> ApplyLowerInv(const Vector<ValueType>& v) const = 0;
 
 	/*
 	 *  In the case that the object is a a lower triangular factor, apply
@@ -57,7 +57,7 @@ public:
 	 *
 	 *  This represents a back substitution solve using the transpose
 	 */
-	virtual Vector<ValueType> ApplyLowerTranspInv(const Vector<ValueType>& v) = 0;
+	virtual Vector<ValueType> ApplyLowerTranspInv(const Vector<ValueType>& v) const = 0;
 
 	// Operators
 	/*

@@ -15,7 +15,7 @@ class CholeskySolver: public AbstractDirectSolver<ValueType> {
 public:
 	// Constructor and destructor
 	CholeskySolver();
-	virtual ~CholeskySolver();
+	~CholeskySolver();
 
 	// Methods (virtual)
 	/*
@@ -31,7 +31,7 @@ public:
 	 * 		x - Vector<ValueType> the solution, output parameter
 	 * 		b - Vector<ValueType> the right hand side, input parameter
 	 */
-	void Solve(Vector<ValueType>& x, const Vector<ValueType>& b);
+	void Solve(Vector<ValueType>& x, const Vector<ValueType>& b) const;
 
 private:
 	// Private data
@@ -55,16 +55,20 @@ CholeskySolver<ValueType>::~CholeskySolver()
 template<typename ValueType>
 void CholeskySolver<ValueType>::Factorize(AbstractMatrix<ValueType>& A)
 {
+	if (mR != NULL)
+		delete mR;
+	mR = NULL;
+
 	A.CholeskyFactorization(mR);
 	this->mFactorized = true;
 }
 
 template<typename ValueType>
 void CholeskySolver<ValueType>::Solve(Vector<ValueType>& x,
-									  const Vector<ValueType>& b)
+									  const Vector<ValueType>& b) const
 {
-	Vector<ValueType> y(mR->ApplyLowerInv(b));
-	x = mR->ApplyLowerTranspInv(y);
+	Vector<ValueType> y(mR->ApplyLowerInv(b)); // forward substitution
+	x = mR->ApplyLowerTranspInv(y);    // backward substituion with R transpose
 }
 
 #endif /* CHOLESKYSOLVER_HPP_ */

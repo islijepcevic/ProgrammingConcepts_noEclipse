@@ -47,7 +47,7 @@ public:
 	 *        The method assumes that R is null at imput
 	 *        and allocates a new AbstractMatrix of whichever type needed
 	 */
-	void CholeskyFactorization(AbstractMatrix<ValueType>*& R);
+	void CholeskyFactorization(AbstractMatrix<ValueType>*& R) const;
 
 	/*
 	 *  In the case that the object is a a lower triangular factor, apply
@@ -55,7 +55,7 @@ public:
 	 *
 	 *  This represents a forward substitution solve
 	 */
-	Vector<ValueType> ApplyLowerInv(const Vector<ValueType>& v);
+	Vector<ValueType> ApplyLowerInv(const Vector<ValueType>& v) const;
 
 	/*
 	 *  In the case that the object is a a lower triangular factor, apply
@@ -63,7 +63,7 @@ public:
 	 *
 	 *  This represents a back substitution solve using the transpose
 	 */
-	Vector<ValueType> ApplyLowerTranspInv(const Vector<ValueType>& v);
+	Vector<ValueType> ApplyLowerTranspInv(const Vector<ValueType>& v) const;
 
 	// Operators
 	Vector<ValueType> operator*(const Vector<ValueType>& v) const;
@@ -123,7 +123,7 @@ void BandedMatrix<ValueType>::SetElement(const int row,
 
 template<typename ValueType>
 void BandedMatrix<ValueType>::CholeskyFactorization(
-		AbstractMatrix<ValueType>*& R)
+		AbstractMatrix<ValueType>*& R) const
 {
 	// Need to first create a pointer to the DenseMatrix. Otherwise I can not work
 	// with the entries.
@@ -154,7 +154,7 @@ void BandedMatrix<ValueType>::CholeskyFactorization(
 
 template<typename ValueType>
 Vector<ValueType>
-BandedMatrix<ValueType>::ApplyLowerInv(const Vector<ValueType>& v)
+BandedMatrix<ValueType>::ApplyLowerInv(const Vector<ValueType>& v) const
 {
 	Vector<ValueType> w(mSize);
 
@@ -172,7 +172,7 @@ BandedMatrix<ValueType>::ApplyLowerInv(const Vector<ValueType>& v)
 
 template<typename ValueType>
 Vector<ValueType>
-BandedMatrix<ValueType>::ApplyLowerTranspInv(const Vector<ValueType>& v)
+BandedMatrix<ValueType>::ApplyLowerTranspInv(const Vector<ValueType>& v) const
 {
 	Vector<ValueType> w(mSize);
 

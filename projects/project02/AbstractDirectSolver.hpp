@@ -36,7 +36,7 @@ public:
 	 * 		x - Vector<ValueType> the solution, output parameter
 	 * 		b - Vector<ValueType> the right hand side, input parameter
 	 */
-	virtual void Solve(Vector<ValueType>& x, const Vector<ValueType>& b) = 0;
+	virtual void Solve(Vector<ValueType>& x, const Vector<ValueType>& b) const = 0;
 
 protected:
 	bool mFactorized;

@@ -30,6 +30,8 @@ public:
 	BandedMatrix(const int size,
 				 const int p,
 				 const int r);
+	// Copy constructor
+	BandedMatrix(const BandedMatrix<ValueType>& M);
 
 	// Destructor
 	~BandedMatrix();
@@ -95,6 +97,22 @@ BandedMatrix<ValueType>::BandedMatrix(const int size,
 		mMatrix[i] += mP;
 		for (int j = -mP; j < mR + 1; ++j) {
 			mMatrix[i][j] = 0.0;
+		}
+	}
+}
+
+template<typename ValueType>
+BandedMatrix<ValueType>::BandedMatrix(const BandedMatrix<ValueType>& M)
+	: mSize(static_cast<int>(M.mSize)),
+	  mP(M.mP),
+	  mR(M.mR)
+{
+	mMatrix = new ValueType*[mSize];
+	for (int i = 0; i < mSize; ++i) {
+		mMatrix[i] = new ValueType[mP + mR + 1];
+		mMatrix[i] += mP;
+		for (int j = -mP; j < mR + 1; ++j) {
+			mMatrix[i][j] = M.mMatrix[i][j];
 		}
 	}
 }

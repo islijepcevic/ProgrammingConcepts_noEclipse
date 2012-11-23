@@ -24,6 +24,8 @@ public:
 	// Constructors
 	// The sole parameter of the constructor is the dimension of the matrix
 	DenseMatrix(const int size);
+	// Copy constructor
+	DenseMatrix(const DenseMatrix<ValueType>& M);
 
 	// Destructor
 	~DenseMatrix();
@@ -88,6 +90,12 @@ DenseMatrix<ValueType>::DenseMatrix(const int size)
 		mMatrix[i].resize(mSize, 0.0);
 	}
 }
+
+template<typename ValueType>
+DenseMatrix<ValueType>::DenseMatrix(const DenseMatrix<ValueType>& M)
+	: mMatrix(M.mMatrix),
+	  mSize(M.mSize)
+{}
 
 // Destructor
 

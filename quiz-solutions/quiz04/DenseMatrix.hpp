@@ -90,6 +90,51 @@ void DenseMatrix<ValueType>::SetElement(const unsigned long row,
 	mMatrix[row][col] = value;
 }
 
+// apply methods 
+
+/*
+ * Perform w = U * v, where U is the upper triangular part of the matrix
+ */
+template<typename ValueType>
+Vector<ValueType> DenseMatrix<ValueType>::ApplyUpperTr(const Vector<ValueType>& v) const {
+
+    Vector<ValueType> result(v.GetSize());
+
+    for (unsigned int row = 0; row < mSize; row++) {
+        ValueType elem = 0;
+        for (unsigned int col = row + 1; col < mSize; col++) {
+            elem = elem + mMatrix[row][col] * v[col];
+        }
+        result[row] = elem;
+    }
+
+    return result;
+}
+
+/*
+ * Solve L x = y for x, where L is the lower triangular part of the matrix,
+ * including the diagonal part
+ *
+ * applying forward substitution
+ */
+template<typename ValueType>
+Vector<ValueType> DenseMatrix<ValueType>::ApplyInvLowerTr(const Vector<ValueType>& v) const {
+    
+    Vector<ValueType> result(v.GetSize());
+
+    for (unsigned int row = 0; row < mSize; row++) {
+        ValueType sum = 0;
+        for (unsigned int col = 0; col < row; col++) {
+            sum = sum + result[col] * mMatrix[row][col];
+        }
+
+        ValueType elem = (v[row] - sum) / mMatrix[row][row];
+        result[row] = elem;
+    }
+
+    return result;
+}
+
 // Operators
 
 template<typename ValueType>

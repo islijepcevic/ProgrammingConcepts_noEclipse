@@ -33,6 +33,30 @@ int GaussSeidel(const AbstractMatrix<ValueType>& A,
 				const ValueType tol,
 				const int maxIter)
 {
+
+    int numIter = 0;
+
+    Vector<ValueType> xk(b);
+
+    while (true) {
+
+        Vector<ValueType> xkk(xk.GetSize());
+
+        xkk = A.ApplyInvLowerTr((b - A.ApplyUpperTr(xk)));
+
+        Vector<ValueType> diff = xkk - xk;
+        xk = xkk;
+
+        numIter++;
+
+        if (diff.norm() < tol) {
+            break;
+        }
+    }
+
+    x = xk;
+
+    return numIter;
 }
 
 #endif /* GAUSSSEIDEL_HPP_ */

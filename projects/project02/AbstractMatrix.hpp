@@ -59,6 +59,10 @@ public:
 	 */
 	virtual void CholeskyFactorization(AbstractMatrix<ValueType>*& R) const = 0;
 
+	// Compute the LU factorization, such that A = LU
+	virtual void LUFactorization(AbstractMatrix<ValueType>*& L,
+								 AbstractMatrix<ValueType>*& U) = 0;
+
 	/*
 	 *  In the case that the object is a a lower triangular factor, apply
 	 *  its inverse to a vector, such that w = L^-1 v
@@ -74,6 +78,14 @@ public:
 	 *  This represents a back substitution solve using the transpose
 	 */
 	virtual Vector<ValueType> ApplyLowerTranspInv(const Vector<ValueType>& v) const = 0;
+
+	/*
+	 *  In the case that the object is a an upper triangular factor, apply
+	 *  its inverse to a vector, such that w = U^-1 v
+	 *
+	 *  This represents a back substitution solve
+	 */
+	virtual Vector<ValueType> ApplyUpperInv(const Vector<ValueType>& v) = 0;
 
 	// Operators
 	/*

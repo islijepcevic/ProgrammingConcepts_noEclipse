@@ -68,6 +68,7 @@ int main(int argc, char* argv[])
 
 	// Solution vectors
 	Vector<Scalar> uChol(N);
+	Vector<Scalar> uLU(N);
 	Vector<Scalar> uCG(N);
         Vector<Scalar> uLU(N);
 
@@ -109,7 +110,7 @@ int main(int argc, char* argv[])
 
 	Vector<Scalar> diff(uChol - uCG);
 
-	std::cout << "norm of the difference between Choleski and CG = "
+	std::cout << "Norm of the difference between Choleski and CG = "
 			<< diff.norm() << std::endl;
         std::cout << std::endl;
 
@@ -134,8 +135,29 @@ int main(int argc, char* argv[])
 			<< diff2.norm() << std::endl;
         std::cout << std::endl;
 
+	// Solve the system Ax = b with the LU solver
+	timer.start();
+
+	AbstractDirectSolver<Scalar>* luSolver = new LUSolver<Scalar>();
+	luSolver->Factorize(*A);
+	luSolver->Solve(uLU, b);
+
+	timer.stop();
+
+	std::cout << "Time to solution with the LU solver is: "
+			  << timer.elapsedTime() << std::endl;
+
+	// std::cout << "Solution with LU solver is:\n";
+	// uLU.Print();
+
+	diff = uLU - uCG;
+
+	std::cout << "Norm of the difference between LU and CG = "
+			  << diff.norm() << std::endl;
+
 	// Clean up
 	delete cholSolver;
+	delete luSolver;
 	delete A;
 
     return 0;

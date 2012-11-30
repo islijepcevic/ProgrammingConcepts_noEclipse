@@ -21,55 +21,47 @@
 template<typename ValueType>
 class BandedMatrix : public AbstractMatrix<ValueType> {
 public:
-    /*
-     *  Constructor with parameters:
-     *  	size - dimension of the matrix
-     *  	p - left bandwidth
-     *  	r - right bandwidth
-     */
-    BandedMatrix(const int size,
-                             const int p,
-                             const int r);
-    // Copy constructor
-    BandedMatrix(const BandedMatrix<ValueType>& M);
+	/*
+	 *  Constructor with parameters:
+	 *  	size - dimension of the matrix
+	 *  	p - left bandwidth
+	 *  	r - right bandwidth
+	 */
+	BandedMatrix(const int size,
+				 const int p,
+				 const int r);
+	// Copy constructor
+	BandedMatrix(const BandedMatrix<ValueType>& M);
 
-    // Destructor
-    ~BandedMatrix();
+	// Destructor
+	~BandedMatrix();
 
-    // Set method
-    // Implementation of pure virtual method in base class
-    void SetElement(const int row, const int col,
-                                const ValueType value);
+	// Set method
+	// Implementation of pure virtual method in base class
+	void SetElement(const int row, const int col,
+			 	    const ValueType value);
 
-    // Methods for direct solvers
+	// Methods for direct solvers
 
-    /*
-     * Compute the LU factorization, such that A = LU
-     * @param L : a pointer to AbstractMatrix L, passed as a reference
-     *          L is a null input, and becomes the output with allocated
-     *          memory
-     * @param U : a pointer to AbstractMatrix U, passed as a reference
-     *          U is a null input, and becomes the output with allocated
-     *          memory
-     */
-    virtual void LUFactorization(AbstractMatrix<ValueType>*& L,
-                                AbstractMatrix<ValueType>*& U) const;
+	/* Compute the Cholesky factorization, such that A = RR^T
+	 * Parameters:
+	 *    R : a pointer to AbstractMatrix passed as reference.
+	 *        The method assumes that R is null at imput
+	 *        and allocates a new AbstractMatrix of whichever type needed
+	 */
+	void CholeskyFactorization(AbstractMatrix<ValueType>*& R) const;
 
-    /* Compute the Cholesky factorization, such that A = RR^T
-     * Parameters:
-     *    R : a pointer to AbstractMatrix passed as reference.
-     *        The method assumes that R is null at imput
-     *        and allocates a new AbstractMatrix of whichever type needed
-     */
-    void CholeskyFactorization(AbstractMatrix<ValueType>*& R) const;
+	// Compute the LU factorization, such that A = LU
+	void LUFactorization(AbstractMatrix<ValueType>*& L,
+						 AbstractMatrix<ValueType>*& U);
 
-    /*
-     *  In the case that the object is a a lower triangular factor, apply
-     *  its inverse to a vector, such that w = L^-1 v
-     *
-     *  This represents a forward substitution solve
-     */
-     Vector<ValueType> ApplyLowerInv(const Vector<ValueType>& v) const;
+	/*
+	 *  In the case that the object is a a lower triangular factor, apply
+	 *  its inverse to a vector, such that w = L^-1 v
+	 *
+	 *  This represents a forward substitution solve
+	 */
+	Vector<ValueType> ApplyLowerInv(const Vector<ValueType>& v) const;
 
 	/*
 	 *  In the case that the object is a a lower triangular factor, apply

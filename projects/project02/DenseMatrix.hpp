@@ -6,6 +6,9 @@
  *
  *  Created on: Oct 31, 2012
  *      Author: radu
+ *
+ *  changed on: Nov 26
+ *      Author: islijepcevic
  */
 
 #ifndef DENSEMATRIX_HPP_
@@ -36,6 +39,18 @@ public:
 			 	    const ValueType value);
 
 	// Methods for direct solvers
+
+        /*
+         * Compute the LU factorization, such that A = LU
+         * @param L : a pointer to AbstractMatrix L, passed as a reference
+         *          L is a null input, and becomes the output with allocated
+         *          memory
+         * @param U : a pointer to AbstractMatrix U, passed as a reference
+         *          U is a null input, and becomes the output with allocated
+         *          memory
+         */
+        virtual void LUFactorization(AbstractMatrix<ValueType>*& L,
+                                    AbstractMatrix<ValueType>*& U) const;
 
 	/* Compute the Cholesky factorization, such that A = RR^T
 	 * Parameters:
@@ -114,6 +129,42 @@ void DenseMatrix<ValueType>::SetElement(const int row,
 }
 
 // Methods for direct solvers
+
+template<typename ValueType>
+void DenseMatrix<ValueType>::LUFactorization(AbstractMatrix<ValueType>*& L,
+                                            AbstractMatrix<ValueType>*& U) const 
+{
+    DenseMatrix<ValueType>* DenseL = new DenseMatrix<ValueType>(mSize);
+    DenseMatrix<ValueType>* DenseU = new DenseMatrix<ValueType>(*this);
+
+    std::vector< std::vector<ValueType> >& l(DenseL->mMatrix);
+    std::vector< std::vector<ValueType> >& u(DenseU->mMatrix);
+
+    // set L to be the identity matrix
+    for (int i = 0; i < mSize; i++) {
+        l[i][i] = 1.0;
+    }
+
+    // do the LU factorization
+    for (int k = 0; k < mSize; k++) {
+
+        // check if pivoting is needed; it shouldn't be needed
+        assert(u[k][k] != 0);
+
+        for (int i = k+1; i < mSize; i++) {
+
+            l[i][k] = u[i][k] / u[k][k];
+
+            for (int j = k+1; j < mSize; j++) {
+                u[i][j] = u[i][j] - (l[i][k] * u[k][j]);
+            }
+        }
+    }
+
+    // equivalent to return statement
+    L = DenseL;
+    U = DenseU;
+}
 
 template<typename ValueType>
 void DenseMatrix<ValueType>::CholeskyFactorization(

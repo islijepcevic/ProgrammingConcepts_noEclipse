@@ -6,6 +6,9 @@
  *
  *  Created on: Oct 31, 2012
  *      Author: radu
+ *
+ * Changed on: Nov 26, 2012
+ *      Author: islijepcevic
  */
 
 #ifndef ABSTRACTMATRIX_HPP_
@@ -35,6 +38,19 @@ public:
 			 	    		   const ValueType value) = 0;
 
 	// Methods for direct solvers
+
+        /*
+         * Compute the LU factorization, such that A = LU
+         * @param L : a pointer to AbstractMatrix L, passed as a reference
+         *          L is a null input, and becomes the output with allocated
+         *          memory
+         * @param U : a pointer to AbstractMatrix U, passed as a reference
+         *          U is a null input, and becomes the output with allocated
+         *          memory
+         */
+        virtual void LUFactorization(AbstractMatrix<ValueType>*& L,
+                                    AbstractMatrix<ValueType>*& U) const = 0;
+
 	/* Compute the Cholesky factorization, such that A = RR^T
 	 * Parameters:
 	 *    R : a pointer to AbstractMatrix passed as reference.

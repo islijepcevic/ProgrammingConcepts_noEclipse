@@ -22,6 +22,7 @@
 #include "Laplacian2DMatrixGenerator.hpp"
 #include "ConjugateGradient.hpp"
 #include "CholeskySolver.hpp"
+#include "LUSolver.hpp"
 #include "WallClock.hpp"
 
 typedef double Scalar;
@@ -68,6 +69,7 @@ int main(int argc, char* argv[])
 	// Solution vectors
 	Vector<Scalar> uChol(N);
 	Vector<Scalar> uCG(N);
+        Vector<Scalar> uLU(N);
 
 	// Time the solvers
 	WallClock timer;
@@ -82,11 +84,12 @@ int main(int argc, char* argv[])
 
 	std::cout << "CG reached solution after " << numIter << " iterations:\n";
 
-	// std::cout << "Solution with CG solver is:\n";
-	// uCG.Print();
+	std::cout << "Solution with CG solver is:\n";
+	uCG.Print();
 
 	std::cout << "Time to solution with the CG solver is: "
 			  << timer.elapsedTime() << std::endl;
+        std::cout << std::endl;
 
 
 	// Solve the system Ax = b with the Cholesky solver
@@ -101,13 +104,35 @@ int main(int argc, char* argv[])
 	std::cout << "Time to solution with the Cholesky solver is: "
 			  << timer.elapsedTime() << std::endl;
 
-	//std::cout << "Solution with Cholesky solver is:\n";
-	// uChol.Print();
+	std::cout << "Solution with Cholesky solver is:\n";
+	uChol.Print();
 
 	Vector<Scalar> diff(uChol - uCG);
 
 	std::cout << "norm of the difference between Choleski and CG = "
 			<< diff.norm() << std::endl;
+        std::cout << std::endl;
+
+        // Solve the system with LU solver
+        timer.start();
+
+        AbstractDirectSolver<Scalar>* luSolver = new LUSolver<Scalar>();
+        luSolver->Factorize(*A);
+        luSolver->Solve(uLU, b);
+
+        timer.stop();
+
+	std::cout << "Time to solution with the LU solver is: "
+			  << timer.elapsedTime() << std::endl;
+
+	std::cout << "Solution with LU solver is:\n";
+	uLU.Print();
+
+	Vector<Scalar> diff2(uLU - uChol);
+
+	std::cout << "norm of the difference between LU and Cholesky = "
+			<< diff2.norm() << std::endl;
+        std::cout << std::endl;
 
 	// Clean up
 	delete cholSolver;

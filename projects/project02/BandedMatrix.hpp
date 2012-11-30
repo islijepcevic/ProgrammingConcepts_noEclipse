@@ -1,12 +1,12 @@
 /*
- * BandedMatrix.hpp
- *
- * Concrete derived class of AbstractMatrix implementing a banded storage format
- * Templated on the type of the values
- *
- *  Created on: Oct 31, 2012
- *      Author: radu
- */
+* BandedMatrix.hpp
+*
+* Concrete derived class of AbstractMatrix implementing a banded storage format
+* Templated on the type of the values
+*
+*  Created on: Oct 31, 2012
+*      Author: radu
+*/
 
 #ifndef BANDEDMATRIX_HPP_
 #define BANDEDMATRIX_HPP_
@@ -21,41 +21,53 @@
 template<typename ValueType>
 class BandedMatrix : public AbstractMatrix<ValueType> {
 public:
-	/*
-	 *  Constructor with parameters:
-	 *  	size - dimension of the matrix
-	 *  	p - left bandwidth
-	 *  	r - right bandwidth
-	 */
-	BandedMatrix(const int size,
-				 const int p,
-				 const int r);
-	// Copy constructor
-	BandedMatrix(const BandedMatrix<ValueType>& M);
+    /*
+     *  Constructor with parameters:
+     *  	size - dimension of the matrix
+     *  	p - left bandwidth
+     *  	r - right bandwidth
+     */
+    BandedMatrix(const int size,
+                             const int p,
+                             const int r);
+    // Copy constructor
+    BandedMatrix(const BandedMatrix<ValueType>& M);
 
-	// Destructor
-	~BandedMatrix();
+    // Destructor
+    ~BandedMatrix();
 
-	// Set method
-	// Implementation of pure virtual method in base class
-	void SetElement(const int row, const int col,
-			 	    const ValueType value);
+    // Set method
+    // Implementation of pure virtual method in base class
+    void SetElement(const int row, const int col,
+                                const ValueType value);
 
-	// Methods for direct solvers
+    // Methods for direct solvers
 
-	/* Compute the Cholesky factorization, such that A = RR^T
-	 * Parameters:
-	 *    R : a pointer to AbstractMatrix passed as reference.
-	 *        The method assumes that R is null at imput
-	 *        and allocates a new AbstractMatrix of whichever type needed
-	 */
-	void CholeskyFactorization(AbstractMatrix<ValueType>*& R) const;
+    /*
+     * Compute the LU factorization, such that A = LU
+     * @param L : a pointer to AbstractMatrix L, passed as a reference
+     *          L is a null input, and becomes the output with allocated
+     *          memory
+     * @param U : a pointer to AbstractMatrix U, passed as a reference
+     *          U is a null input, and becomes the output with allocated
+     *          memory
+     */
+    virtual void LUFactorization(AbstractMatrix<ValueType>*& L,
+                                AbstractMatrix<ValueType>*& U) const;
 
-	/*
-	 *  In the case that the object is a a lower triangular factor, apply
-	 *  its inverse to a vector, such that w = L^-1 v
-	 *
-	 *  This represents a forward substitution solve
+    /* Compute the Cholesky factorization, such that A = RR^T
+     * Parameters:
+     *    R : a pointer to AbstractMatrix passed as reference.
+     *        The method assumes that R is null at imput
+     *        and allocates a new AbstractMatrix of whichever type needed
+     */
+    void CholeskyFactorization(AbstractMatrix<ValueType>*& R) const;
+
+    /*
+     *  In the case that the object is a a lower triangular factor, apply
+     *  its inverse to a vector, such that w = L^-1 v
+     *
+     *  This represents a forward substitution solve
 	 */
 	Vector<ValueType> ApplyLowerInv(const Vector<ValueType>& v) const;
 
@@ -132,11 +144,53 @@ BandedMatrix<ValueType>::~BandedMatrix()
 // Set method
 
 template<typename ValueType>
-void BandedMatrix<ValueType>::SetElement(const int row,
-							 	 	 	 	const int col,
-							 	 	 	 	const ValueType value)
+void BandedMatrix<ValueType>::SetElement(const int row, const int col, 
+                                        const ValueType value)
 {
 	mMatrix[row][col - row] = value;
+}
+
+// factorization methods
+
+template<typename ValueType>
+void BandedMatrix<ValueType>::LUFactorization(AbstractMatrix<ValueType>*& L,
+                                            AbstractMatrix<ValueType>*& U) const 
+{          
+
+    BandedMatrix<ValueType>* BandedL = new BandedMatrix<ValueType>(mSize, mP, 0);
+    BandedMatrix<ValueType>* BandedU = new BandedMatrix<ValueType>(*this);
+
+    ValueType** l(BandedL->mMatrix);
+    ValueType** u(BandedU->mMatrix);
+
+    // make L an identity matrix
+    for (int i = 0; i < mSize; i++) {
+        BandedL->SetElement(i, i, 1.0);
+    }
+
+    // perform factorization
+    for (int k = 0; k < mSize; k++) {
+
+        // check if pivoting needed
+        assert(u[k][0] != 0.0);
+
+        for (int i = k+1; i < mSize; i++) {
+
+            int lCol = std::max(k-i, -mP);
+            l[i][lCol] = u[i][lCol] / u[k][0];
+
+            for (int j = k+1; j < mSize; j++) {
+
+                int uCol = std::min(j - i, mR - 1);
+                int uCol2 = std::min(j - k, mR - 1);
+                u[i][uCol] = u[i][uCol] - (l[i][lCol] * u[k][uCol2]);
+            }
+        }
+    }
+
+    // "return"
+    L = BandedL;
+    U = BandedU;
 }
 
 template<typename ValueType>

@@ -5,7 +5,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 # As you solve exercises, you need to add them here.
 # The syntax is add_executable(executable_name source_file_name)
 
-add_executable(ch-11-mpi-vector Vector.cpp ch-11-mpi-vector.cpp)
+#add_executable(ch-11-mpi-vector Vector.cpp ch-11-mpi-vector.cpp)
 add_executable(ch-11-ex-01-solution ch-11-ex-01-solution.cpp)
 add_executable(ch-11-ex-02-solution ch-11-ex-02-solution.cpp)
 add_executable(ch-11-ex-03-solution ch-11-ex-03-solution.cpp)

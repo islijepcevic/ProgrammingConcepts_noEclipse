@@ -7,3 +7,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(mpi_hello_world mpi_hello_world.cpp)
 
+#add_executable(ch-11-mpi-vector Vector.cpp ch-11-mpi-vector.cpp)
+add_executable(ch-11-ex-01-solution ch-11-ex-01-solution.cpp)
+add_executable(ch-11-ex-02-solution ch-11-ex-02-solution.cpp)
+add_executable(ch-11-ex-03-solution ch-11-ex-03-solution.cpp)
+
+#file(COPY test.dat DESTINATION ${CMAKE_CURRENT_BINARY_DIR})               

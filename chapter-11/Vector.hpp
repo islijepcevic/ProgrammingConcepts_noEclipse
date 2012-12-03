@@ -37,10 +37,12 @@ public:
 	Vector operator+(const Vector& v) const;
 	// Binary substraction operator
 	Vector operator-(const Vector& v) const;
+	// Bynary operator=, set all local entries to given value
+	Vector operator=(const ValueType d) const;
 	// Binary vector * ValueType operator
 	Vector operator*(const ValueType d) const;
 	// Square bracket (const and non-const versions)
-	const ValueType operator[](const int i) const;
+	const ValueType GetEntry(const int i) const;
 	ValueType& operator[](const int i);
 	// Dot product of two vectors
 	ValueType dot(const Vector& v) const;
@@ -51,6 +53,8 @@ public:
 	// Public methods
 	void Print(std::ostream& s = std::cout);
 
+private:
+	int computeOwningProcessorAndIndex(int const index, int& owningProc, int& localIndex) const;
 	// Private data
 private:
 	unsigned long mGlobalSize;

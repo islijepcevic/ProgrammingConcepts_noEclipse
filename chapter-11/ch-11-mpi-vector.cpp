@@ -13,11 +13,29 @@
 
 int main(int argc, char* argv[])
 {
+
+	MPI::Init();
+
 	// Allocating a smaller vector than required
-    Vector x(3);
-    Vector y(3);
+    Vector x(30);
+    Vector y(30);
+
+    if (MPI::COMM_WORLD.Get_rank() == 0)
+    {
+    	x[0] = 5;
+    	y[0] = -2;
+    }
+
+    double scalarProd(x.dot(y));
 
 
+    if (MPI::COMM_WORLD.Get_rank() == 0)
+    {
+    	std::cout << "dot(x,y) = "
+    		<< scalarProd << std::endl;
+    }
+
+    MPI::Finalize();
 
 	return 0;
 }
